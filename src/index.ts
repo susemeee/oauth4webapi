@@ -2137,7 +2137,11 @@ async function processGenericAccessTokenResponse(
     json.expires_in !== undefined &&
     (typeof json.expires_in !== 'number' || json.expires_in <= 0)
   ) {
-    throw new OPE('"response" body "expires_in" property must be a positive number')
+    // @ts-ignore
+    json.expires_in = Number(json.expires_in)
+    if (Number.isNaN(json.expires_in)) {
+      throw new OPE('"response" body "expires_in" property must be a positive number')
+    }
   }
 
   if (
